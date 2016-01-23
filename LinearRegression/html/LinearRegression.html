@@ -198,9 +198,9 @@ y = data(:,end);
 <span class="comment">% Plotting data</span>
 fig = figure;
 scatter3(transpose(x(2,:)),transpose(x(3,:)),y,<span class="string">'filled'</span>,<span class="string">'r'</span>);
-xlabel(<span class="string">'x'</span>);
-ylabel(<span class="string">'y'</span>);
-zlabel(<span class="string">'z'</span>);
+xlabel(<span class="string">'x1'</span>);
+ylabel(<span class="string">'x2'</span>);
+zlabel(<span class="string">'y'</span>);
 grid <span class="string">on</span>
 
 <span class="comment">% Featuring Scale with Mean Normalization</span>
@@ -276,8 +276,8 @@ fig = figure;
 scatter3(x(2,:),x(3,:),y,<span class="string">'filled'</span>,<span class="string">'r'</span>);
 hold <span class="string">on</span>
 scatter3(x(2,:),x(3,:),yestimated,<span class="string">'b'</span>,<span class="string">'LineWidth'</span>,2);
-xlabel(<span class="string">'x'</span>);
-ylabel(<span class="string">'y'</span>);
+xlabel(<span class="string">'x1'</span>);
+ylabel(<span class="string">'x2'</span>);
 legend(<span class="string">'Original Data'</span>,<span class="string">'Estimated Data'</span>);
 </pre><img vspace="5" hspace="5" src="LinearRegression_05.png" alt=""> <img vspace="5" hspace="5" src="LinearRegression_06.png" alt=""> <img vspace="5" hspace="5" src="LinearRegression_07.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
@@ -427,9 +427,9 @@ y = data(:,end);
 % Plotting data
 fig = figure;
 scatter3(transpose(x(2,:)),transpose(x(3,:)),y,'filled','r');
-xlabel('x');
-ylabel('y');
-zlabel('z');
+xlabel('x1');
+ylabel('x2');
+zlabel('y');
 grid on
 
 % Featuring Scale with Mean Normalization
@@ -505,8 +505,8 @@ fig = figure;
 scatter3(x(2,:),x(3,:),y,'filled','r');
 hold on
 scatter3(x(2,:),x(3,:),yestimated,'b','LineWidth',2);
-xlabel('x');
-ylabel('y');
+xlabel('x1');
+ylabel('x2');
 legend('Original Data','Estimated Data');
 ##### SOURCE END #####
 --></body></html>

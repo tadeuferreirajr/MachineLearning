@@ -144,9 +144,9 @@ y = data(:,end);
 % Plotting data
 fig = figure;
 scatter3(transpose(x(2,:)),transpose(x(3,:)),y,'filled','r');
-xlabel('x');
-ylabel('y');
-zlabel('z');
+xlabel('x1');
+ylabel('x2');
+zlabel('y');
 grid on
 
 % Featuring Scale with Mean Normalization
@@ -222,6 +222,6 @@ fig = figure;
 scatter3(x(2,:),x(3,:),y,'filled','r');
 hold on
 scatter3(x(2,:),x(3,:),yestimated,'b','LineWidth',2);
-xlabel('x');
-ylabel('y');
+xlabel('x1');
+ylabel('x2');
 legend('Original Data','Estimated Data');
