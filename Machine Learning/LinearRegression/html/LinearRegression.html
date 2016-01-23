@@ -1,0 +1,512 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>LinearRegression</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-01-23"><meta name="DC.source" content="LinearRegression.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">LINEAR REGRESSION</a></li><li><a href="#2">INFO</a></li><li><a href="#3">INITIALIZATION</a></li><li><a href="#4">UNIVARIATE LINEAR REGRESSION APPLICATION</a></li><li><a href="#5">MULTIVARIATE LINEAR REGRESSION APPLICATION</a></li></ul></div><h2>LINEAR REGRESSION<a name="1"></a></h2><pre class="codeinput"><span class="comment">% It takes a data and perform a linear regression to determine the</span>
+<span class="comment">% curve that describes the relationship among the variables of the data.</span>
+</pre><h2>INFO<a name="2"></a></h2><pre class="codeinput"><span class="comment">% Author: Tadeu Ferreira de Sousa J&uacute;nior</span>
+<span class="comment">% Date: Jan/2016</span>
+<span class="comment">% visit: http://datascienceinsights.blogspot.com.br/</span>
+</pre><h2>INITIALIZATION<a name="3"></a></h2><pre class="codeinput">addpath(<span class="string">'functions/'</span>);
+addpath(<span class="string">'data/'</span>);
+
+clear <span class="string">all</span>;
+close <span class="string">all</span>;
+</pre><h2>UNIVARIATE LINEAR REGRESSION APPLICATION<a name="4"></a></h2><pre class="codeinput"><span class="comment">% Reading data</span>
+data = importdata(<span class="string">'Data1.txt'</span>,<span class="string">','</span>,0);
+
+x = data(:,1);
+y = data(:,2);
+
+<span class="comment">% Plotting data</span>
+scatter(x,y,<span class="string">'filled'</span>,<span class="string">'r'</span>);
+xlabel(<span class="string">'x'</span>);
+ylabel(<span class="string">'y'</span>)
+grid <span class="string">on</span>;
+
+<span class="comment">% Initial guesses for parameters</span>
+parameters = [0,0];
+theta0 = parameters(1);
+theta1 = parameters(2);
+
+alpha = 0.02; <span class="comment">% learning rate</span>
+
+
+CostHist = [];
+num_iter = [];
+Theta0Hist = [];
+Theta1Hist = [];
+
+J = CostFun(theta0,theta1,x,y);
+CostHist = [CostHist J];
+
+num_iter = [num_iter 1];
+Theta0Hist = [Theta0Hist theta0];
+Theta1Hist = [Theta1Hist theta1];
+
+i = 2;
+delta = 100;
+
+<span class="keyword">while</span> delta &gt; 10^(-7)
+
+    <span class="comment">% Updating parameters theta0 and theta1</span>
+    parameters = UpdateParameters(theta0,theta1,x,y,alpha);
+    theta0 = parameters(1);
+    theta1 = parameters(2);
+    Theta0Hist = [Theta0Hist theta0];
+    Theta1Hist = [Theta1Hist theta1];
+
+    J = CostFun(theta0,theta1,x,y);
+
+    CostHist = [CostHist J];
+
+    delta = abs(CostHist(i-1) - CostHist(i));
+
+    <span class="comment">% Diverging Handler</span>
+    <span class="keyword">if</span> abs(CostHist(i) &gt; 2*abs(CostHist(i-1)))
+        disp(<span class="string">'The cost function is diverging! Consider a smaller value for alpha.'</span>)
+        <span class="keyword">return</span>
+    <span class="keyword">end</span>
+
+    num_iter = [num_iter i];
+    i = i + 1;
+<span class="keyword">end</span>
+
+
+<span class="comment">% Cost Plot</span>
+fig = figure;
+plot(num_iter,CostHist,<span class="string">'LineWidth'</span>,3);
+xlabel(<span class="string">'Number of iterations'</span>);
+ylabel(<span class="string">'Cost'</span>);
+grid <span class="string">on</span>
+
+<span class="comment">% Contour Plot</span>
+range = 500;
+Theta0Range = linspace(-range,range);
+Theta1Range = linspace(-range,range);
+sum = 0;
+m = length(x);
+
+<span class="keyword">for</span> p = 1:length(Theta0Range)
+    <span class="keyword">for</span> q = 1:length(Theta1Range)
+        <span class="keyword">for</span> i = 1:m
+            sum = sum + (Theta0Range(p) + Theta1Range(q)*x(i) - y(i))^(2);
+        <span class="keyword">end</span>
+        Cost(p,q) = (1/2*m)*(sum);
+        sum = 0;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+fig = figure;
+grid <span class="string">on</span>
+contour(Theta0Range,Theta1Range,Cost);
+xlabel(<span class="string">'\theta_0'</span>)
+ylabel(<span class="string">'\theta_1'</span>)
+hold <span class="string">on</span>
+scatter(Theta0Hist(end),Theta1Hist(end),<span class="string">'filled'</span>,<span class="string">'LineWidth'</span>,3);
+grid <span class="string">on</span>
+
+
+<span class="comment">% Estimated curve plot</span>
+theta0est = Theta0Hist(end); <span class="comment">% estimated theta0</span>
+theta1est = Theta1Hist(end); <span class="comment">% estimated theta 1</span>
+
+yestimated = theta0est + theta1est*x;
+
+fig = figure;
+scatter(x,y,<span class="string">'filled'</span>,<span class="string">'r'</span>);
+hold <span class="string">on</span>
+plot(x,yestimated,<span class="string">'b'</span>,<span class="string">'LineWidth'</span>,2);
+xlabel(<span class="string">'x'</span>);
+ylabel(<span class="string">'y estimated'</span>);
+legend(<span class="string">'Original Data'</span>,<span class="string">'Estimated curve'</span>);
+grid <span class="string">on</span>
+</pre><img vspace="5" hspace="5" src="LinearRegression_01.png" alt=""> <img vspace="5" hspace="5" src="LinearRegression_02.png" alt=""> <img vspace="5" hspace="5" src="LinearRegression_03.png" alt=""> <img vspace="5" hspace="5" src="LinearRegression_04.png" alt=""> <h2>MULTIVARIATE LINEAR REGRESSION APPLICATION<a name="5"></a></h2><pre class="codeinput"><span class="comment">% Reading data</span>
+data = importdata(<span class="string">'Data2.txt'</span>,<span class="string">','</span>,0);
+
+x = data;
+x(:,end) = [];
+unitColumn = ones([size(x,1),1]);
+
+x = transpose([unitColumn x]);
+y = data(:,end);
+
+<span class="comment">% Plotting data</span>
+fig = figure;
+scatter3(transpose(x(2,:)),transpose(x(3,:)),y,<span class="string">'filled'</span>,<span class="string">'r'</span>);
+xlabel(<span class="string">'x'</span>);
+ylabel(<span class="string">'y'</span>);
+zlabel(<span class="string">'z'</span>);
+grid <span class="string">on</span>
+
+<span class="comment">% Featuring Scale with Mean Normalization</span>
+x = transpose(x);
+<span class="keyword">for</span> j = 2:size(x,2)
+    mean_value = mean(x(:,j));
+    std_value = std(x(:,j));
+    <span class="keyword">for</span> i = 1:size(x,1)
+        x(i,j) = (x(i,j) - mean_value)/(std_value);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+x = transpose(x);
+
+<span class="comment">% % Initial guesses for parameters</span>
+parameters = [0;0;0];
+alpha = 1; <span class="comment">% learning rate</span>
+
+
+CostHist = [];
+num_iter = [];
+ThetaHist = [];
+
+
+J = MultiCostFun(parameters,x,y);
+CostHist = [CostHist J];
+
+num_iter = [num_iter 1];
+ThetaHist = [ThetaHist parameters];
+
+i = 2;
+delta = 100;
+
+<span class="keyword">while</span> delta &gt; 10^(-7)
+
+    <span class="comment">% Updating parameters theta0 and theta1</span>
+    parameters = MultiUpdateParameters(parameters,x,y,alpha);
+
+    ThetaHist = [ThetaHist parameters];
+
+    J = MultiCostFun(parameters,x,y);
+
+    CostHist = [CostHist J];
+
+    delta = abs(CostHist(i-1) - CostHist(i));
+
+    <span class="comment">% Diverging Handler</span>
+    <span class="keyword">if</span> abs(CostHist(i) &gt; 2*abs(CostHist(i-1)))
+        disp(<span class="string">'The cost function is diverging! Consider a smaller value for alpha'</span>);
+        <span class="keyword">return</span>
+    <span class="keyword">end</span>
+
+    num_iter = [num_iter i];
+    i = i + 1;
+<span class="keyword">end</span>
+
+
+<span class="comment">% Cost Plot</span>
+fig = figure;
+plot(num_iter,CostHist,<span class="string">'LineWidth'</span>,3);
+xlabel(<span class="string">'Number of iterations'</span>);
+ylabel(<span class="string">'Cost'</span>);
+grid <span class="string">on</span>
+
+<span class="comment">% Estimated curve plot</span>
+yestimated = transpose(parameters)*x;
+
+x = data;
+x(:,end) = [];
+unitColumn = ones([size(x,1),1]);
+x = transpose([unitColumn x]);
+
+fig = figure;
+scatter3(x(2,:),x(3,:),y,<span class="string">'filled'</span>,<span class="string">'r'</span>);
+hold <span class="string">on</span>
+scatter3(x(2,:),x(3,:),yestimated,<span class="string">'b'</span>,<span class="string">'LineWidth'</span>,2);
+xlabel(<span class="string">'x'</span>);
+ylabel(<span class="string">'y'</span>);
+legend(<span class="string">'Original Data'</span>,<span class="string">'Estimated Data'</span>);
+</pre><img vspace="5" hspace="5" src="LinearRegression_05.png" alt=""> <img vspace="5" hspace="5" src="LinearRegression_06.png" alt=""> <img vspace="5" hspace="5" src="LinearRegression_07.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% LINEAR REGRESSION
+
+% It takes a data and perform a linear regression to determine the 
+% curve that describes the relationship among the variables of the data.
+
+%% INFO
+
+% Author: Tadeu Ferreira de Sousa Júnior
+% Date: Jan/2016
+% visit: http://datascienceinsights.blogspot.com.br/
+
+%% INITIALIZATION
+addpath('functions/');
+addpath('data/');
+
+clear all;
+close all;
+
+%% UNIVARIATE LINEAR REGRESSION APPLICATION
+
+% Reading data
+data = importdata('Data1.txt',',',0);
+
+x = data(:,1);
+y = data(:,2);
+
+% Plotting data
+scatter(x,y,'filled','r');
+xlabel('x');
+ylabel('y')
+grid on;
+
+% Initial guesses for parameters
+parameters = [0,0];
+theta0 = parameters(1);
+theta1 = parameters(2);
+
+alpha = 0.02; % learning rate
+
+
+CostHist = [];
+num_iter = [];
+Theta0Hist = [];
+Theta1Hist = [];
+
+J = CostFun(theta0,theta1,x,y);
+CostHist = [CostHist J];
+
+num_iter = [num_iter 1];
+Theta0Hist = [Theta0Hist theta0];
+Theta1Hist = [Theta1Hist theta1];
+
+i = 2;
+delta = 100;
+
+while delta > 10^(-7)
+   
+    % Updating parameters theta0 and theta1
+    parameters = UpdateParameters(theta0,theta1,x,y,alpha);
+    theta0 = parameters(1);
+    theta1 = parameters(2);
+    Theta0Hist = [Theta0Hist theta0];
+    Theta1Hist = [Theta1Hist theta1];
+    
+    J = CostFun(theta0,theta1,x,y); 
+    
+    CostHist = [CostHist J];
+    
+    delta = abs(CostHist(i-1) - CostHist(i));
+    
+    % Diverging Handler
+    if abs(CostHist(i) > 2*abs(CostHist(i-1)))
+        disp('The cost function is diverging! Consider a smaller value for alpha.')
+        return
+    end
+       
+    num_iter = [num_iter i];
+    i = i + 1;
+end
+
+
+% Cost Plot
+fig = figure;
+plot(num_iter,CostHist,'LineWidth',3);
+xlabel('Number of iterations');
+ylabel('Cost');
+grid on
+
+% Contour Plot
+range = 500;
+Theta0Range = linspace(-range,range);
+Theta1Range = linspace(-range,range);
+sum = 0;
+m = length(x);
+
+for p = 1:length(Theta0Range)
+    for q = 1:length(Theta1Range)
+        for i = 1:m
+            sum = sum + (Theta0Range(p) + Theta1Range(q)*x(i) - y(i))^(2);
+        end
+        Cost(p,q) = (1/2*m)*(sum);
+        sum = 0;
+    end
+end
+
+fig = figure;
+grid on
+contour(Theta0Range,Theta1Range,Cost);
+xlabel('\theta_0')
+ylabel('\theta_1')
+hold on
+scatter(Theta0Hist(end),Theta1Hist(end),'filled','LineWidth',3);
+grid on
+
+
+% Estimated curve plot
+theta0est = Theta0Hist(end); % estimated theta0
+theta1est = Theta1Hist(end); % estimated theta 1
+
+yestimated = theta0est + theta1est*x;
+
+fig = figure;
+scatter(x,y,'filled','r');
+hold on
+plot(x,yestimated,'b','LineWidth',2);
+xlabel('x');
+ylabel('y estimated');
+legend('Original Data','Estimated curve');
+grid on
+
+
+%% MULTIVARIATE LINEAR REGRESSION APPLICATION 
+
+% Reading data
+data = importdata('Data2.txt',',',0);
+
+x = data;
+x(:,end) = [];
+unitColumn = ones([size(x,1),1]);
+
+x = transpose([unitColumn x]);
+y = data(:,end);
+
+% Plotting data
+fig = figure;
+scatter3(transpose(x(2,:)),transpose(x(3,:)),y,'filled','r');
+xlabel('x');
+ylabel('y');
+zlabel('z');
+grid on
+
+% Featuring Scale with Mean Normalization
+x = transpose(x);
+for j = 2:size(x,2)
+    mean_value = mean(x(:,j));
+    std_value = std(x(:,j));
+    for i = 1:size(x,1)
+        x(i,j) = (x(i,j) - mean_value)/(std_value);
+    end   
+end
+x = transpose(x);
+
+% % Initial guesses for parameters
+parameters = [0;0;0];
+alpha = 1; % learning rate
+
+
+CostHist = [];
+num_iter = [];
+ThetaHist = [];
+
+ 
+J = MultiCostFun(parameters,x,y);
+CostHist = [CostHist J];
+ 
+num_iter = [num_iter 1];
+ThetaHist = [ThetaHist parameters];
+ 
+i = 2;
+delta = 100;
+ 
+while delta > 10^(-7)
+    
+    % Updating parameters theta0 and theta1
+    parameters = MultiUpdateParameters(parameters,x,y,alpha);
+     
+    ThetaHist = [ThetaHist parameters];
+
+    J = MultiCostFun(parameters,x,y); 
+    
+    CostHist = [CostHist J];
+    
+    delta = abs(CostHist(i-1) - CostHist(i));
+    
+    % Diverging Handler
+    if abs(CostHist(i) > 2*abs(CostHist(i-1)))
+        disp('The cost function is diverging! Consider a smaller value for alpha');
+        return
+    end
+    
+    num_iter = [num_iter i];
+    i = i + 1;
+end
+
+
+% Cost Plot
+fig = figure;
+plot(num_iter,CostHist,'LineWidth',3);
+xlabel('Number of iterations');
+ylabel('Cost');
+grid on
+
+% Estimated curve plot
+yestimated = transpose(parameters)*x;
+
+x = data;
+x(:,end) = [];
+unitColumn = ones([size(x,1),1]);
+x = transpose([unitColumn x]);
+
+fig = figure;
+scatter3(x(2,:),x(3,:),y,'filled','r');
+hold on
+scatter3(x(2,:),x(3,:),yestimated,'b','LineWidth',2);
+xlabel('x');
+ylabel('y');
+legend('Original Data','Estimated Data');
+##### SOURCE END #####
+--></body></html>
